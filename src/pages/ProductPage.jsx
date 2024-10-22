@@ -10,7 +10,7 @@ function ProductPage() {
 
   useEffect(() => {
     dispatch(fetchProducts());
-    dispatch(fetchCategories()); // Llama la acción para obtener las categorías
+    dispatch(fetchCategories()); 
   }, [dispatch]);
 
   if (loading) {
