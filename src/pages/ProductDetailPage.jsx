@@ -8,7 +8,7 @@ function ProductDetailPage() {
   const dispatch = useDispatch();
   const { selectedProduct, loading, error } = useSelector((state) => state.products);
 
-  // Obtener los detalles del producto al montar el componente
+  
   useEffect(() => {
     dispatch(fetchProductById(id));
   }, [dispatch, id]);
