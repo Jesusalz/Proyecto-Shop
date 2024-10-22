@@ -39,7 +39,7 @@ Tecnologías Utilizadas
 ·Tailwind CSS: Para estilos modernos y responsivos.
 ·Axios: Para realizar peticiones HTTP a la API.
 
-#Características Faltantes
+Características Faltantes
 Agregar Productos a Favoritos: Implementar funcionalidad para que los usuarios puedan marcar productos como favoritos.
 Perfil de Usuario: Crear una sección donde los usuarios puedan ver y editar su información personal.
 Mejoras en la Interfaz de Usuario: Continuar optimizando y refinando el diseño de la aplicación para mejorar la experiencia del usuario.
