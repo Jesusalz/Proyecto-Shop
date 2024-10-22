@@ -14,10 +14,8 @@ const LoginForm = () => {
     e.preventDefault();
     const credentials = { email, password };
     
-    
     await dispatch(login(credentials)); 
 
-    
     if (!error) { 
       navigate('/products'); 
     }

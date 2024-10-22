@@ -12,15 +12,14 @@ const NavBar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/'); 
+    navigate('/'); // Redirigir a la página principal después de cerrar sesión
   };
 
   return (
     <nav className="bg-gray-800 p-4 flex justify-between items-center">
-      <div className="text-white">
-        <Link to="/">Home</Link>
-        
-      </div>
+      <Link to="/" className="flex items-center">
+        <i className="fa fa-shopping-cart text-white text-2xl"></i>
+      </Link>
       <ProductSearch />
       <div className="text-white">
         {user ? (
