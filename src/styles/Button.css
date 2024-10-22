@@ -1,0 +1,19 @@
+.button {
+  background-color: #007bff; /* Color de fondo */
+  color: white; /* Color del texto */
+  padding: 10px 20px; /* Espaciado interno */
+  border: none; /* Sin bordes */
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 16px; /* Tamaño de la fuente */
+  cursor: pointer; /* Cursor de mano al pasar */
+  transition: background-color 0.3s ease; /* Transición suave para el hover */
+}
+
+.button:hover {
+  background-color: #0056b3; /* Color de fondo al hacer hover */
+}
+
+.button:disabled {
+  background-color: #ccc; /* Color cuando el botón está deshabilitado */
+  cursor: not-allowed; /* Cambia el cursor a no permitido */
+}

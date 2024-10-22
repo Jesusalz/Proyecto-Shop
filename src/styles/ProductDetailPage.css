@@ -1,0 +1,28 @@
+
+.img-container {
+  @apply w-full md:w-1/2 h-auto object-cover rounded-lg shadow-lg;
+}
+
+.info-container {
+  @apply md:ml-4;
+}
+
+.product-title {
+  @apply text-3xl font-bold mb-4;
+}
+
+.product-description {
+  @apply text-lg mb-2;
+}
+
+.product-price {
+  @apply text-xl font-semibold mb-2;
+}
+
+.add-to-cart-button {
+  @apply bg-green-500 text-white p-2 rounded-lg;
+}
+
+.session-message {
+  @apply text-red-500 mt-2;
+}

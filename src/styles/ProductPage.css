@@ -1,0 +1,24 @@
+
+.product-card {
+  @apply flex flex-col border rounded-lg overflow-hidden shadow-lg p-4 m-4 transition-transform duration-300 ease-in-out hover:scale-105;
+}
+
+.product-image {
+  @apply h-48 w-full object-cover;
+}
+
+.product-title {
+  @apply text-xl font-semibold mt-2;
+}
+
+.product-description {
+  @apply text-gray-700 mt-1;
+}
+
+.product-price {
+  @apply text-lg font-bold mt-2;
+}
+
+.product-button {
+  @apply bg-green-500 text-white py-2 rounded-lg mt-4 hover:bg-green-600;
+}
