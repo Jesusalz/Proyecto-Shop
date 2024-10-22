@@ -1,25 +1,41 @@
 import React, { useState } from 'react';
-import { SearchIcon } from '@heroicons/react/outline';
+import { useNavigate } from 'react-router-dom'; 
+import { searchProducts } from '../services/api';
+import { useDebounce } from '../hooks/useDebounce';
 
 const ProductSearch = () => {
-  const [query, setQuery] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 300); 
+  const navigate = useNavigate(); 
 
-  const handleSearch = (e) => {
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value); 
+  };
+
+  const handleSearchSubmit = async (e) => {
     e.preventDefault();
-    
+
+    if (debouncedSearchTerm) { 
+      try {
+        const results = await searchProducts(debouncedSearchTerm); 
+        navigate('/search', { state: { results } }); 
+      } catch (error) {
+        console.error('Error al buscar productos:', error);
+      }
+    }
   };
 
   return (
-    <form onSubmit={handleSearch} className="relative">
+    <form onSubmit={handleSearchSubmit} className="flex items-center">
       <input
         type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        value={searchTerm}
+        onChange={handleSearchChange}
         placeholder="Buscar productos..."
-        className="bg-white text-gray-800 rounded-md p-2 pl-10 focus:ring focus:ring-blue-300"
+        className="p-2 border rounded"
       />
-      <button type="submit" className="absolute inset-y-0 left-0 flex items-center pl-3">
-        <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+      <button type="submit" className="ml-2 p-2 bg-blue-500 text-white rounded">
+        Buscar
       </button>
     </form>
   );
