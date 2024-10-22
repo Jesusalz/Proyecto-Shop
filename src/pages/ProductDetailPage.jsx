@@ -21,7 +21,7 @@ function ProductDetailPage() {
     return <p>Error: {error}</p>;
   }
 
-  // Asegúrate de que selectedProduct tenga los datos antes de renderizar
+  
   if (!selectedProduct) {
     return <p>Producto no encontrado</p>;
   }
