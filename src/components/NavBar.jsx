@@ -12,7 +12,7 @@ const NavBar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/'); // Redirigir a la página principal después de cerrar sesión
+    navigate('/'); 
   };
 
   return (
