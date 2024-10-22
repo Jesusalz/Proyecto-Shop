@@ -2,12 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { login as apiLogin } from '../services/api'; 
 import axios from 'axios';
 
-
 const API_URL = import.meta.env.VITE_API_URL; 
 
 const initialState = {
-  user: null,
-  token: null,
+  user: JSON.parse(localStorage.getItem('user')) || null,
+  token: localStorage.getItem('token') || null,
   error: null,
   loading: false,
 };
@@ -29,6 +28,14 @@ const authSlice = createSlice({
     logout(state) {
       state.user = null;
       state.token = null;
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    },
+    setUser(state, action) {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
     },
   },
   extraReducers: (builder) => {
@@ -41,12 +48,13 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user || null; 
         state.token = action.payload.token || null; 
+        localStorage.setItem('token', action.payload.token);
+        localStorage.setItem('user', JSON.stringify(action.payload.user));
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
-      
       .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -63,5 +71,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setUser } = authSlice.actions;
 export default authSlice.reducer;

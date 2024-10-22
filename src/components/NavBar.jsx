@@ -3,14 +3,16 @@ import { Link } from 'react-router-dom';
 import ProductSearch from './ProductSearch'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
-    dispatch(logout()); 
-    
+    dispatch(logout());
+    navigate('/'); 
   };
 
   return (
