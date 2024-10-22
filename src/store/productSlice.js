@@ -35,7 +35,7 @@ const productSlice = createSlice({
     selectedProduct: null, // Producto seleccionado
     categories: [],        // Lista de categorías
     loading: false,        // Estado de carga
-    error: null,           // Error si ocurre
+    error: null,           // Error x si ocurre
   },
   extraReducers: (builder) => {
     builder
