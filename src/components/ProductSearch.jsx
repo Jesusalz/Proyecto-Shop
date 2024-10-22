@@ -5,20 +5,20 @@ import { useDebounce } from '../hooks/useDebounce';
 
 const ProductSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 300); // Retrasa la búsqueda
+  const debouncedSearchTerm = useDebounce(searchTerm, 300); 
   const navigate = useNavigate(); 
 
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value); // Actualiza el término de búsqueda
+    setSearchTerm(e.target.value); 
   };
 
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
 
-    if (debouncedSearchTerm) { // Solo busca si hay un término de búsqueda
+    if (debouncedSearchTerm) { 
       try {
-        const results = await searchProducts(debouncedSearchTerm); // Llama a la API de búsqueda
-        navigate('/search', { state: { results } }); // Navega a la página de resultados
+        const results = await searchProducts(debouncedSearchTerm); 
+        navigate('/search', { state: { results } }); 
       } catch (error) {
         console.error('Error al buscar productos:', error);
       }
