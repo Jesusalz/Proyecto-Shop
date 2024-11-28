@@ -1,6 +1,19 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL;
+export const API_URL = import.meta.env.VITE_API_URL;
+
+export const config = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
+
+export const authConfig = (token) => ({
+  headers: {
+    ...config.headers,
+    Authorization: `Bearer ${token}`
+  }
+});
 
 const api = axios.create({
   baseURL: API_URL,
