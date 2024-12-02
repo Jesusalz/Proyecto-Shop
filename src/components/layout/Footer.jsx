@@ -28,18 +28,17 @@ const footerLinks = {
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900">
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 xl:gap-12">
-          {/* Enlaces de Productos */}
+    <footer className="bg-white text-gray-800 border-t border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-sm font-semibold leading-6 text-white">Productos</h3>
+            <h3 className="text-lg font-semibold leading-6 text-gray-900">Productos</h3>
             <ul role="list" className="mt-6 space-y-4">
               {footerLinks.productos.map((item) => (
                 <li key={item.name}>
                   <Link 
                     to={item.href}
-                    className="text-sm leading-6 text-gray-300 hover:text-white"
+                    className="text-sm leading-6 text-gray-600 hover:text-indigo-600"
                   >
                     {item.name}
                   </Link>
@@ -48,15 +47,14 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Enlaces de Soporte */}
           <div>
-            <h3 className="text-sm font-semibold leading-6 text-white">Soporte</h3>
+            <h3 className="text-lg font-semibold leading-6 text-gray-900">Soporte</h3>
             <ul role="list" className="mt-6 space-y-4">
               {footerLinks.soporte.map((item) => (
                 <li key={item.name}>
                   <Link 
                     to={item.href}
-                    className="text-sm leading-6 text-gray-300 hover:text-white"
+                    className="text-sm leading-6 text-gray-600 hover:text-indigo-600"
                   >
                     {item.name}
                   </Link>
@@ -65,15 +63,14 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Redes Sociales */}
           <div>
-            <h3 className="text-sm font-semibold leading-6 text-white">Síguenos</h3>
+            <h3 className="text-lg font-semibold leading-6 text-gray-900">Síguenos</h3>
             <div className="mt-6 flex space-x-6">
               {footerLinks.social.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-gray-400 hover:text-gray-300"
+                  className="text-gray-600 hover:text-indigo-600"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -85,10 +82,9 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="mt-12 border-t border-gray-800 pt-8">
-          <p className="text-xs leading-5 text-gray-400 text-center">
-            &copy; {new Date().getFullYear()} Proyecto Tienda. 
+        <div className="mt-12 border-t border-gray-200 pt-8">
+          <p className="text-xs leading-5 text-gray-600 text-center">
+            © {new Date().getFullYear()} Proyecto Tienda. 
             Todos los derechos reservados Jesus Alz.
           </p>
         </div>
