@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-export const API_URL = import.meta.env.VITE_API_URL;
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+export const getAuthHeader = () => {
+  const token = localStorage.getItem('token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
 
 export const config = {
   headers: {
@@ -8,10 +13,11 @@ export const config = {
   }
 };
 
-export const authConfig = (token) => ({
+// Configuración con token de autenticación
+export const authConfig = () => ({
   headers: {
     ...config.headers,
-    Authorization: `Bearer ${token}`
+    ...getAuthHeader()
   }
 });
 
@@ -44,6 +50,18 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Configurar interceptores globales
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Error:', error);
+    if (error.response?.status === 500) {
+      console.error('Server error:', error.response.data);
     }
     return Promise.reject(error);
   }

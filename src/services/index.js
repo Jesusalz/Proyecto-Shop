@@ -1,4 +1,11 @@
-export { default as api } from './config';
-export { productService } from './productService';
-export { authService } from './authService';
-export { userService } from './userService';
+import authService from './authService.js';
+import cartService from './cartService.js';
+import productService from './productService.js';
+import userService from './userService.js';
+
+export {
+  authService,
+  cartService,
+  productService,
+  userService
+};

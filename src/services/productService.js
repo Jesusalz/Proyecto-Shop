@@ -1,45 +1,90 @@
-import api from './config';
+import api from './api';
 
-export const productService = {
-  async getAll(params = {}) {
-    const response = await api.get('/products', { params });
-    return response.data;
+const productService = {
+  getAll: async (params = { limit: 12, skip: 0 }) => {
+    try {
+      const response = await api.get('/products', { 
+        params: {
+          limit: params.limit,
+          skip: params.skip
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Error al cargar los productos');
+    }
   },
 
-  async getById(id) {
-    const response = await api.get(`/products/${id}`);
-    return response.data;
+  getById: async (id) => {
+    try {
+      const response = await api.get(`/products/${id}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Error al cargar el producto');
+    }
   },
 
-  async getByCategory(category) {
-    const response = await api.get(`/products/category/${category}`);
-    return response.data;
+  getByCategory: async (category, params = { limit: 12, skip: 0 }) => {
+    try {
+      const response = await api.get(`/products/category/${category}`, {
+        params: {
+          limit: params.limit,
+          skip: params.skip
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Error al cargar los productos de la categoría');
+    }
+  },  searchProducts: async (query) => {
+    try {
+      if (!query?.trim()) {
+        throw new Error('Término de búsqueda no válido');
+      }
+      console.log('Searching products with query:', query);
+      const response = await api.get(`/products/search?q=${query}`);
+      console.log('Search results received:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error searching products:', error);
+      throw new Error('Error en la búsqueda de productos');
+    }
   },
 
-  async search(query) {
-    const response = await api.get('/products/search', {
-      params: { search: query }
-    });
-    return response.data.products;
+  create: async (productData) => {
+    try {
+      const response = await api.post('/products', productData);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Error al crear el producto');
+    }
   },
 
-  async create(productData) {
-    const response = await api.post('/products', productData);
-    return response.data;
+  update: async (id, productData) => {
+    try {
+      const response = await api.put(`/products/${id}`, productData);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Error al actualizar el producto');
+    }
   },
 
-  async update(id, productData) {
-    const response = await api.put(`/products/${id}`, productData);
-    return response.data;
+  delete: async (id) => {
+    try {
+      await api.delete(`/products/${id}`);
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Error al eliminar el producto');
+    }
   },
 
-  async delete(id) {
-    const response = await api.delete(`/products/${id}`);
-    return response.data;
-  },
-
-  async getCategories() {
-    const response = await api.get('/products/category-list');
-    return response.data;
+  getCategoryList: async () => {
+    try {
+      const response = await api.get('/products/category-list');
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Error al cargar las categorías');
+    }
   }
 };
+
+export default productService;

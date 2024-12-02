@@ -1,38 +1,88 @@
-import api from './config';
+import axios from 'axios';
+import { API_URL, authConfig } from './config';
 
-export const userService = {
-  async getAll(params = {}) {
-    const response = await api.get('/users', { params });
-    return response.data;
+const userService = {
+  // Obtener todos los usuarios
+  getUsers: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/users`, authConfig());
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  async getById(id) {
-    const response = await api.get(`/users/${id}`);
-    return response.data;
+  // Obtener un usuario por ID
+  getUserById: async (userId) => {
+    try {
+      const response = await axios.get(`${API_URL}/users/${userId}`, authConfig());
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  async create(userData) {
-    const response = await api.post('/users', userData);
-    return response.data;
+  // Actualizar usuario
+  updateUser: async (userId, userData) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/users/${userId}`, 
+        userData, 
+        authConfig()
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  async update(id, userData) {
-    const response = await api.put(`/users/${id}`, userData);
-    return response.data;
+  // Eliminar usuario
+  deleteUser: async (userId) => {
+    try {
+      await axios.delete(`${API_URL}/users/${userId}`, authConfig());
+      return true;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  async delete(id) {
-    const response = await api.delete(`/users/${id}`);
-    return response.data;
+  // Actualizar rol de usuario (solo admin)
+  updateUserRole: async (userId, role) => {
+    try {
+      const response = await axios.patch(
+        `${API_URL}/users/${userId}/role`,
+        { role },
+        authConfig()
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  async updateRole(id, role) {
-    const response = await api.put(`/users/${id}/role`, { role });
-    return response.data;
+  // Obtener perfil del usuario actual
+  getCurrentUserProfile: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/users/profile`, authConfig());
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   },
 
-  async toggleStatus(id) {
-    const response = await api.put(`/users/${id}/toggle-status`);
-    return response.data;
+  // Actualizar perfil del usuario actual
+  updateProfile: async (profileData) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/users/profile`,
+        profileData,
+        authConfig()
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 };
+
+export default userService;
