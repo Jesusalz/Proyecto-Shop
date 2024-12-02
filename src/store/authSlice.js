@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { authService } from '@/services';
 
+// Estado inicial
 const initialState = {
-  user: JSON.parse(localStorage.getItem('user')) || null,
-  token: localStorage.getItem('token') || null,
+  user: null,
+  isAuthenticated: false,
+  isLoading: false,
   error: null,
-  loading: false,
-  isAuthenticated: !!localStorage.getItem('token'),
+  token: localStorage.getItem('token')
 };
 
 // Thunks
@@ -15,9 +16,10 @@ export const login = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await authService.login(credentials);
-      return response;
+      localStorage.setItem('token', response.token);
+      return response.user;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response?.data?.message || 'Error al iniciar sesión');
     }
   }
 );
@@ -27,9 +29,10 @@ export const register = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await authService.register(userData);
-      return response;
+      localStorage.setItem('token', response.token);
+      return response.user;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response?.data?.message || 'Error al registrarse');
     }
   }
 );
@@ -38,126 +41,95 @@ export const getCurrentUser = createAsyncThunk(
   'auth/getCurrentUser',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await authService.getCurrentUser();
-      return response;
+      const user = await authService.getCurrentUser();
+      return user;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response?.data?.message || 'Error al obtener usuario');
     }
   }
 );
 
-export const updateProfile = createAsyncThunk(
-  'auth/updateProfile',
-  async (userData, { rejectWithValue }) => {
-    try {
-      const response = await authService.updateProfile(userData);
-      return response;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
+// Slice
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout(state) {
+    logout: (state) => {
       state.user = null;
-      state.token = null;
       state.isAuthenticated = false;
-      authService.logout();
-    },
-    setUser(state, action) {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      state.isAuthenticated = true;
-      localStorage.setItem('token', action.payload.token);
-      localStorage.setItem('user', JSON.stringify(action.payload.user));
-    },
-    clearError(state) {
+      state.token = null;
       state.error = null;
+      localStorage.removeItem('token');
     },
+    clearError: (state) => {
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
+    // Login
     builder
-      // Login cases
       .addCase(login.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.isLoading = false;
+        state.user = action.payload;
         state.isAuthenticated = true;
         state.error = null;
       })
       .addCase(login.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || 'Error al iniciar sesión';
-        state.isAuthenticated = false;
+        state.isLoading = false;
+        state.error = action.payload;
       })
 
-      // Register cases
+    // Register
+    builder
       .addCase(register.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(register.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.isLoading = false;
+        state.user = action.payload;
         state.isAuthenticated = true;
         state.error = null;
       })
       .addCase(register.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || 'Error al registrarse';
-        state.isAuthenticated = false;
+        state.isLoading = false;
+        state.error = action.payload;
       })
 
-      // Get current user cases
+    // Get Current User
+    builder
       .addCase(getCurrentUser.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.user = action.payload;
+        state.isAuthenticated = true;
         state.error = null;
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;
-        state.token = null;
-      })
-
-      // Update profile cases
-      .addCase(updateProfile.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateProfile.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload;
-        state.error = null;
-        localStorage.setItem('user', JSON.stringify(action.payload));
-      })
-      .addCase(updateProfile.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload;
       });
-  },
+  }
 });
 
-// Selectors
-export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
-export const selectCurrentUser = (state) => state.auth.user;
-export const selectAuthError = (state) => state.auth.error;
-export const selectAuthLoading = (state) => state.auth.loading;
+// Actions
+export const { logout, clearError } = authSlice.actions;
 
-export const { logout, setUser, clearError } = authSlice.actions;
+// Selectors
+export const selectUser = (state) => state.auth.user;
+export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
+export const selectIsLoading = (state) => state.auth.isLoading;
+export const selectError = (state) => state.auth.error;
+export const selectToken = (state) => state.auth.token;
+
+// Reducer
 export default authSlice.reducer;
