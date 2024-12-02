@@ -1,113 +1,59 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { Toaster } from 'react-hot-toast';
-
-// Layout
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { NavBar, Footer } from '@/components/layout';
-import { LoadingSpinner } from '@/components/common';
-
-// Pages
+import { LandingPage } from '@/components/features/landingpage';
+import { selectIsAuthenticated } from '@/store/authSlice';
+import { Cart, CartPage } from '@/components/cart';
+import { ProfilePage } from '@/components/features/users';
+import { FavoritesPage } from '@/components/features/favorites';
+import { CheckoutPage } from '@/components/checkout';
 import {
   ProductPage,
   ProductDetailPage,
   LoginPage,
   RegisterPage,
   NotFoundPage,
-  UsersPage,
   CategoryPage,
-  SearchResultsPage,
-  ProfilePage,
-  FavoritesPage,
-  CartPage,
+  SearchResultsPage
 } from '@/pages';
 
-// Landing
-
-import { LandingPage } from '@/features/landingpage';
-
-// Auth
-import { ProtectedRoute } from '@/components/auth';
-import { getCurrentUser } from '@/store/authSlice';
-
-function App() {
-  const dispatch = useDispatch();
-  const { isAuthenticated, loading, user } = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(getCurrentUser());
-    }
-  }, [dispatch, isAuthenticated]);
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
+const AppContent = () => {
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/';
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   return (
+    <div className="min-h-screen flex flex-col">
+      {!isLandingPage && <NavBar />}
+      <main className="flex-grow">
+        <Routes>
+          {/* Rutas públicas */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/products" element={<ProductPage />} />
+          <Route path="/products/:id" element={<ProductDetailPage />} />
+          <Route path="/categories/:category" element={<CategoryPage />} />
+          <Route path="/search" element={<SearchResultsPage />} />
+
+          {/* Rutas protegidas */}
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Routes>
+      </main>
+      {!isLandingPage && <Footer />}
+    </div>
+  );
+};
+
+const App = () => {
+  return (
     <Router>
-      <div className="flex flex-col min-h-screen">
-        <NavBar />
-        
-        <main className="flex-grow">
-          <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<LandingPage />} />
-            <Route 
-              path="/login" 
-              element={
-                !isAuthenticated 
-                  ? <LoginPage /> 
-                  : <Navigate to="/products" replace />
-              } 
-            />
-            <Route 
-              path="/register" 
-              element={
-                !isAuthenticated 
-                  ? <RegisterPage /> 
-                  : <Navigate to="/products" replace />
-              } 
-            />
-            <Route path="/products" element={<ProductPage />} />
-            <Route path="/products/:id" element={<ProductDetailPage />} />
-            <Route path="/category/:category" element={<CategoryPage />} />
-            <Route path="/search" element={<SearchResultsPage />} />
-            
-            {/* Protected routes */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/favorites" element={<FavoritesPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              {user?.role === 'admin' && (
-                <Route path="/users" element={<UsersPage />} />
-              )}
-            </Route>
-
-            {/* Redirect /home to /products */}
-            <Route path="/home" element={<Navigate to="/products" replace />} />
-
-            {/* Catch all route */}
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </main>
-
-        <Footer />
-      </div>
-
-      {/* Toast notifications */}
-      <Toaster 
-        position="top-right"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            background: '#363636',
-            color: '#fff',
-          },
-        }}
-      />
+      <AppContent />
     </Router>
   );
-}
+};
 
 export default App;
