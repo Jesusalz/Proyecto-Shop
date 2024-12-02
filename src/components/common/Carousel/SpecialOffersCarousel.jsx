@@ -11,3 +11,4 @@ const SpecialOffersCarousel = ({ products }) => (
 );
 
 export default SpecialOffersCarousel;
+//Visita mi GitHub: https://github.com/Jesusalz

@@ -109,3 +109,4 @@ const FilterBar = () => {
 };
 
 export default FilterBar;
+//Visita mi GitHub: https://github.com/Jesusalz

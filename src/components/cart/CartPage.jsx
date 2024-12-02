@@ -29,3 +29,4 @@ const CartPage = () => {
 };
 
 export default CartPage;
+// Desarrollado por Jesús - Visita mi GitHub: https://github.com/Jesusalz

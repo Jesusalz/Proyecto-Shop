@@ -53,3 +53,4 @@ const CheckoutSummary = ({ items, step }) => {
 };
 
 export default CheckoutSummary;
+// Desarrollado por Jesús - Visita mi GitHub: https://github.com/Jesusalz

@@ -74,3 +74,4 @@ FavoriteButton.propTypes = {
 };
 
 export default ProductItem;
+//Visita mi GitHub: https://github.com/Jesusalz

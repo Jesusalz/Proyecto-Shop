@@ -72,3 +72,4 @@ const CartItem = ({ item }) => {
   );
 };
 export default CartItem;
+// Desarrollado por Jesús - Visita mi GitHub: https://github.com/Jesusalz

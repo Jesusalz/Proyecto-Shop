@@ -32,3 +32,5 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
+//Visita mi GitHub: https://github.com/Jesusalz
+

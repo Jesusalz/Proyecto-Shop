@@ -49,3 +49,4 @@ const CartSummary = () => {
 };
 
 export default CartSummary;
+// Desarrollado por Jesús - Visita mi GitHub: https://github.com/Jesusalz

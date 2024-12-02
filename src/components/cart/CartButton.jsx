@@ -18,3 +18,4 @@ const CartButton = ({ product }) => {
 };
 
 export default CartButton;
+// Desarrollado por Jesús - Visita mi GitHub: https://github.com/Jesusalz

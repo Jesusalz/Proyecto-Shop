@@ -86,3 +86,4 @@ const Carousel = ({
 };
 
 export default Carousel;
+// Desarrollado por Jesús - Visita mi GitHub: https://github.com/Jesusalz

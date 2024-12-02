@@ -98,10 +98,11 @@ const LoginPage = () => {
 
       {/* Footer */}
       <footer className="py-4 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} Mi Tienda. Todos los derechos reservados.
+        © {new Date().getFullYear()} Mi Tienda. Todos los derechos reservados Jesus Alz.
       </footer>
     </div>
   );
 };
 
 export default LoginPage;
+//Visita mi GitHub: https://github.com/Jesusalz

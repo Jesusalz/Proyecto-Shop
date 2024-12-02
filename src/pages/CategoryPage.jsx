@@ -126,3 +126,4 @@ const CategoryPage = () => {
 };
 
 export default CategoryPage;
+//Visita mi GitHub: https://github.com/Jesusalz

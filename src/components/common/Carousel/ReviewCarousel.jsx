@@ -31,3 +31,4 @@ const ReviewCarousel = ({ reviews }) => (
 );
 
 export default ReviewCarousel;
+//Visita mi GitHub: https://github.com/Jesusalz

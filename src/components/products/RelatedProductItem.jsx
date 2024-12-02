@@ -27,3 +27,4 @@ const RelatedProductItem = ({ product }) => {
 };
 
 export default RelatedProductItem;
+//Visita mi GitHub: https://github.com/Jesusalz

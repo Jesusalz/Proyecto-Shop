@@ -56,3 +56,4 @@ const RelatedProductsCarousel = ({ products }) => {
 };
 
 export default RelatedProductsCarousel;
+// Desarrollado por Jesús - Visita mi GitHub: https://github.com/Jesusalz

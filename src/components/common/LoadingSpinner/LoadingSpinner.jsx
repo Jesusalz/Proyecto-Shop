@@ -9,3 +9,4 @@ const LoadingSpinner = () => {
 };
 
 export default LoadingSpinner;
+//Visita mi GitHub: https://github.com/Jesusalz

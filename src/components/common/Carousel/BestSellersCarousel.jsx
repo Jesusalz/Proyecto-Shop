@@ -11,3 +11,4 @@ const BestSellersCarousel = ({ products }) => (
 );
 
 export default BestSellersCarousel;
+// Desarrollado por Jesús - Visita mi GitHub: https://github.com/Jesusalz

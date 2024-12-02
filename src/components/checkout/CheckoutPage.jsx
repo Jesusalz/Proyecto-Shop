@@ -26,3 +26,4 @@ const CheckoutPage = () => {
 };
 
 export default CheckoutPage;
+// Desarrollado por Jesús - Visita mi GitHub: https://github.com/Jesusalz

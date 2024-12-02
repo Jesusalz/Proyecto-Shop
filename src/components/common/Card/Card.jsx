@@ -10,3 +10,4 @@ const Card = ({ children, className, ...props }) => {
 };
 
 export default Card;
+// Desarrollado por Jesús - Visita mi GitHub: https://github.com/Jesusalz

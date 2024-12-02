@@ -4,3 +4,4 @@ export { default as ProductSearch } from './ProductSearch';
 export { default as RelatedProductItem } from './RelatedProductItem';
 export { default as LoadMore } from './LoadMore';
 export { default as FilterBar } from './FilterBar';
+//Visita mi GitHub: https://github.com/Jesusalz
