@@ -32,7 +32,7 @@ const Hero = () => {
               <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/3 flex items-center justify-center p-8">
                 <img
                   className="w-96 h-auto object-contain drop-shadow-2xl filter hover:scale-105 hover:rotate-2 transition-all duration-500 ease-in-out"
-                  src="https://pixabay.com/get/g6399cbd5df899eb522c68f741bd65ac80dd912af34684b936e88513b6c2731a7c00de54aa48a612b73754f6945b6844c_640.png"
+                  src="/imagen carro.png"
                   alt="Hero banner"
                 />
               </div>
