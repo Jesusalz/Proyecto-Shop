@@ -3,7 +3,7 @@
 ## Descripción
 Tienda Shop es una aplicación de comercio electrónico desarrollada en **React** utilizando **Vite**, que permite a los usuarios navegar, buscar y comprar productos en línea. La aplicación cuenta con una interfaz moderna y amigable, optimizada con **Tailwind CSS** para proporcionar un diseño responsivo y atractivo.
 
-![Captura de Pantalla 1](/imagen1.png)
+![Vista previa del proyecto](./public/Tienda-Shop-Curso-12-02-2024_08_34_PM.png)
 
 ## Características Implementadas
 
