@@ -7,6 +7,3 @@ export { default as NotFoundPage } from './NotFoundPage';
 export { default as UsersPage } from './UsersPage';
 export { default as CategoryPage } from './CategoryPage';
 export { default as SearchResultsPage } from './SearchResultsPage';
-export { default as ProfilePage } from './features/users/ProfilePage';
-export { default as FavoritesPage } from './features/favorites/FavoritesPage';
-export { default as CartPage } from './features/cart/CartPage';
