@@ -1,39 +1,42 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectCartItems, toggleCart } from '@/store/cartSlice';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import { CartItem } from './CartItem';
-import { CartSummary } from './CartSummary';
+import { useSelector } from 'react-redux';
+import { selectCartItems } from '@/store/cartSlice';
+import CartItem from './CartItem';
+import CartSummary from './CartSummary';
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
-  const dispatch = useDispatch();
-  const items = useSelector(selectCartItems);
+  const cartItems = useSelector(selectCartItems);
+
+  if (!cartItems || cartItems.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-xl font-medium text-gray-900">Tu carrito está vacío</h2>
+        <p className="mt-2 text-gray-500">
+          Agrega algunos productos a tu carrito para continuar comprando.
+        </p>
+        <Link 
+          to="/products" 
+          className="mt-4 inline-block bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700"
+        >
+          Ver productos
+        </Link>
+      </div>
+    );
+  }
 
   return (
-    <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-lg z-50">
-      <div className="p-4 border-b">
-        <div className="flex justify-between items-center">
-          <h2 className="text-lg font-semibold">Carrito de Compras</h2>
-          <button 
-            onClick={() => dispatch(toggleCart())}
-            className="p-2 hover:bg-gray-100 rounded-full"
-          >
-            <XMarkIcon className="h-6 w-6" />
-          </button>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="lg:col-span-2">
+        <div className="space-y-4">
+          {cartItems.map((item) => (
+            <CartItem key={item.id} item={item} />
+          ))}
         </div>
       </div>
-
-      <div className="overflow-y-auto h-[calc(100vh-180px)] p-4">
-        {items.length === 0 ? (
-          <p className="text-center text-gray-500">El carrito está vacío</p>
-        ) : (
-          items.map(item => (
-            <CartItem key={item.id} item={item} />
-          ))
-        )}
+      <div>
+        <CartSummary />
       </div>
-
-      <CartSummary />
     </div>
   );
 };

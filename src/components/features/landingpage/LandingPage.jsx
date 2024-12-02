@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Hero, Features, Footer } from './components';
+import { Hero, Features } from './components';
+import { Footer } from '@/components/layout';
 
 const LandingPage = () => {
   const navigate = useNavigate();

@@ -2,11 +2,31 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
+
+// Layout
 import { NavBar, Footer } from '@/components/layout';
 import { LoadingSpinner } from '@/components/common';
-import {ProductPage, ProductDetailPage, LoginPage, RegisterPage, NotFoundPage, UsersPage, CategoryPage,
-  SearchResultsPage, ProfilePage, FavoritesPage, CartPage,} from '@/pages';
-import { LandingPage } from '@/features/landing';
+
+// Pages
+import {
+  ProductPage,
+  ProductDetailPage,
+  LoginPage,
+  RegisterPage,
+  NotFoundPage,
+  UsersPage,
+  CategoryPage,
+  SearchResultsPage,
+  ProfilePage,
+  FavoritesPage,
+  CartPage,
+} from '@/pages';
+
+// Landing
+
+import { LandingPage } from '@/features/landingpage';
+
+// Auth
 import { ProtectedRoute } from '@/components/auth';
 import { getCurrentUser } from '@/store/authSlice';
 
@@ -31,7 +51,7 @@ function App() {
         
         <main className="flex-grow">
           <Routes>
-            
+            {/* Public routes */}
             <Route path="/" element={<LandingPage />} />
             <Route 
               path="/login" 
@@ -54,7 +74,7 @@ function App() {
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/search" element={<SearchResultsPage />} />
             
-            
+            {/* Protected routes */}
             <Route element={<ProtectedRoute />}>
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/favorites" element={<FavoritesPage />} />
@@ -63,7 +83,11 @@ function App() {
                 <Route path="/users" element={<UsersPage />} />
               )}
             </Route>
+
+            {/* Redirect /home to /products */}
             <Route path="/home" element={<Navigate to="/products" replace />} />
+
+            {/* Catch all route */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
@@ -71,7 +95,7 @@ function App() {
         <Footer />
       </div>
 
-      
+      {/* Toast notifications */}
       <Toaster 
         position="top-right"
         toastOptions={{
