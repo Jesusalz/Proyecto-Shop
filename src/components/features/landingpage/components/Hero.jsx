@@ -1,97 +1,42 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/common';
-import { ShoppingBagIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 
 const Hero = () => {
   return (
-    <div className="relative overflow-hidden bg-white">
-      {/* Fondo decorativo */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white" />
-      
-      <div className="relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="pt-20 pb-24 text-center lg:pt-32 lg:pb-36">
-            {/* Contenido principal */}
-            <div className="mx-auto max-w-3xl">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                Bienvenido a{' '}
-                <span className="text-blue-600">
-                  Nuestra Tienda
-                </span>
+    <div className="relative overflow-hidden bg-gradient-to-r from-white via-blue-100 to-indigo-200">
+      <div className="max-w-7xl mx-auto">
+        <div className="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+          <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 lg:mt-16 lg:px-8 xl:mt-28">
+            <div className="sm:text-center lg:text-left">
+              <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                <span className="block xl:inline">Las mejores ofertas en</span>{' '}
+                <span className="block text-indigo-600 xl:inline">productos exclusivos</span>
               </h1>
-              
-              <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-xl">
-                Descubre una amplia selección de productos de alta calidad. 
-                Ofertas exclusivas y envíos rápidos para hacer tu experiencia 
-                de compra única.
+              <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                Descubre nuestra selección de productos de alta calidad a los mejores precios.
               </p>
-              
-              {/* Botones de acción */}
-              <div className="mt-10 flex items-center justify-center gap-x-6">
-                <Link to="/home">
-                  <Button 
-                    variant="primary"
-                    size="lg"
-                    className="group"
-                  >
-                    <span className="flex items-center">
-                      Comienza a comprar
-                      <ShoppingBagIcon 
-                        className="ml-2 h-5 w-5 group-hover:animate-bounce" 
-                      />
-                    </span>
-                  </Button>
-                </Link>
-
-                <Link 
-                  to="/products"
-                  className="flex items-center text-sm font-semibold leading-6 
-                           text-gray-900 hover:text-blue-600 transition-colors"
-                >
-                  Ver catálogo 
-                  <ArrowRightIcon 
-                    className="ml-1 h-4 w-4 group-hover:translate-x-1 
-                             transition-transform" 
-                  />
-                </Link>
-              </div>
-              
-              {/* Estadísticas o badges */}
-              <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                {[
-                  ['1000+', 'Productos'],
-                  ['24/7', 'Soporte'],
-                  ['100%', 'Garantía'],
-                ].map(([stat, label]) => (
-                  <div 
-                    key={label}
-                    className="bg-white/60 backdrop-blur-sm rounded-lg 
-                             shadow-sm px-4 py-3"
-                  >
-                    <dt className="text-2xl font-bold text-blue-600">
-                      {stat}
-                    </dt>
-                    <dd className="text-sm text-gray-600">
-                      {label}
-                    </dd>
-                  </div>
-                ))}
+              <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                <div className="rounded-md shadow">
+                  <Link to="/products">
+                    <Button className="w-full flex items-center justify-center px-8 py-3">
+                      Comenzar a comprar
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          </main>
         </div>
       </div>
-      
-      {/* Decoración de fondo (opcional) */}
-      <div className="absolute inset-x-0 -bottom-40 -z-10 transform-gpu 
-                    overflow-hidden blur-3xl sm:-bottom-80">
-        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] 
-                      w-[36.125rem] -translate-x-1/2 rotate-[30deg] 
-                      bg-gradient-to-tr from-blue-200 to-blue-400 opacity-30 
-                      sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" />
-      </div>
-    </div>
+              <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/3 flex items-center justify-center p-8">
+                <img
+                  className="w-96 h-auto object-contain drop-shadow-2xl filter hover:scale-105 hover:rotate-2 transition-all duration-500 ease-in-out"
+                  src="https://pixabay.com/get/g6399cbd5df899eb522c68f741bd65ac80dd912af34684b936e88513b6c2731a7c00de54aa48a612b73754f6945b6844c_640.png"
+                  alt="Hero banner"
+                />
+              </div>
+            </div>
   );
 };
 

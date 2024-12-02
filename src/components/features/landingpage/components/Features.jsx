@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card } from '@/components/common';
+import { SpecialOffersCarousel } from '@/components/common/Carousel';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProductsByCategory, selectAllProducts } from '@/store/productSlice';
 import { 
   ShoppingBagIcon, 
   TagIcon, 
@@ -44,8 +47,15 @@ const FeatureCard = ({ title, description, icon: Icon }) => (
 );
 
 const Features = () => {
+  const dispatch = useDispatch();
+  const products = useSelector(selectAllProducts);
+
+  useEffect(() => {
+    dispatch(fetchProductsByCategory('laptops'));
+  }, [dispatch]);
+
   return (
-    <section className="py-16 px-4 bg-gray-50">
+    <section className="py-16 px-4 bg-gradient-to-r from-white via-blue-100 to-indigo-200">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
@@ -56,13 +66,20 @@ const Features = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {featuresList.map((feature) => (
             <FeatureCard
               key={feature.title}
               {...feature}
             />
           ))}
+        </div>
+
+        <div className="mt-16">
+          <h3 className="text-2xl font-bold text-center mb-8">
+            Laptops en Oferta
+          </h3>
+          <SpecialOffersCarousel products={products} />
         </div>
       </div>
     </section>
