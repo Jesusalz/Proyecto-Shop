@@ -1,24 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { productService } from '@/services';
 import { ProductList } from '@/components/products';
 import { Button, Card } from '@/components/common';
 import { 
   ArrowLeftIcon,
-  FunnelIcon,
   MagnifyingGlassIcon 
 } from '@heroicons/react/24/outline';
 
 const SearchResultsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const searchQuery = new URLSearchParams(location.search).get('q');
-  const results = location.state?.results || [];
-  
+  const [results, setResults] = useState([]); 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const searchQuery = new URLSearchParams(location.search).get('q') || location.state?.query;
+  const initialResults = location.state?.results || [];
+  const totalResults = location.state?.total || 0;
+
   const [sortBy, setSortBy] = useState('relevance');
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
 
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      if (searchQuery && (!initialResults || initialResults.length === 0)) {
+        setLoading(true);
+        try {
+          const searchResults = await productService.searchProducts(searchQuery);
+          
+          // Asegurar que results sea un array
+          const productsArray = Array.isArray(searchResults) 
+            ? searchResults 
+            : (searchResults.products || []);
+          
+          setResults(productsArray);
+          setLoading(false);
+        } catch (err) {
+          setError(err.message);
+          setLoading(false);
+        }
+      } else {
+        setResults(initialResults);
+      }
+    };
+
+    fetchSearchResults();
+  }, [searchQuery, initialResults]);
+
   // Filtrar y ordenar resultados
-  const filteredResults = results
+  const filteredResults = (Array.isArray(results) ? results : [])
     .filter(product => 
       product.price >= priceRange.min && 
       product.price <= priceRange.max
@@ -36,10 +67,14 @@ const SearchResultsPage = () => {
       }
     });
 
+  if (loading) return <div>Cargando resultados...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
+      {/* Header de resultados de búsqueda */}
       <div className="mb-8">
+        {/* Botón para volver atrás */}
         <Button
           variant="outline"
           onClick={() => navigate(-1)}
@@ -49,16 +84,18 @@ const SearchResultsPage = () => {
           Volver
         </Button>
 
+        {/* Información de resultados y opciones de ordenamiento */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
               Resultados de búsqueda
             </h1>
             <p className="mt-1 text-gray-600">
-              {filteredResults.length} resultados para "{searchQuery}"
+              {filteredResults.length} de {totalResults} resultados para "{searchQuery}"
             </p>
           </div>
 
+          {/* Selector de ordenamiento */}
           <div className="flex items-center space-x-4">
             <select
               value={sortBy}
@@ -74,17 +111,14 @@ const SearchResultsPage = () => {
         </div>
       </div>
 
-      {/* Contenido principal */}
+      {/* Resto del código permanece igual */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Sidebar con filtros */}
+        {/* Sidebar con filtros de precio */}
         <aside className="lg:col-span-1">
           <Card className="sticky top-4 p-4 space-y-6">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">
-                Filtros
-              </h3>
-
-              {/* Rango de precio */}
+              <h3 className="font-semibold text-gray-900 mb-4">Filtros</h3>
+              {/* Filtro de rango de precio */}
               <div className="space-y-4">
                 <label className="block text-sm font-medium text-gray-700">
                   Rango de precio
@@ -114,7 +148,7 @@ const SearchResultsPage = () => {
                 </div>
               </div>
 
-              {/* Botón limpiar filtros */}
+              {/* Botón para limpiar filtros */}
               <Button
                 variant="outline"
                 onClick={() => {
@@ -134,6 +168,7 @@ const SearchResultsPage = () => {
           {filteredResults.length > 0 ? (
             <ProductList products={filteredResults} />
           ) : (
+            // Mensaje cuando no hay resultados
             <Card className="p-8 text-center">
               <MagnifyingGlassIcon className="mx-auto h-12 w-12 text-gray-400" />
               <h3 className="mt-4 text-lg font-medium text-gray-900">
@@ -154,3 +189,4 @@ const SearchResultsPage = () => {
 };
 
 export default SearchResultsPage;
+
