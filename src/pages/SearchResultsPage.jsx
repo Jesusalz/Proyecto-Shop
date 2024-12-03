@@ -9,38 +9,53 @@ import {
 } from '@heroicons/react/24/outline';
 
 const SearchResultsPage = () => {
+  // Utilizo hooks de navegación para manejar la interacción del usuario
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Gestiono el estado de los resultados de búsqueda
+  // Controlo la carga, los resultados y posibles errores
   const [results, setResults] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Extraigo el término de búsqueda de la URL o del estado de navegación
+  // Me permite manejar búsquedas desde diferentes puntos de la aplicación
   const searchQuery = new URLSearchParams(location.search).get('q') || location.state?.query;
   const initialResults = location.state?.results || [];
   const totalResults = location.state?.total || 0;
 
+  // Configuro estados para gestionar filtros y ordenamiento
+  // Me dan flexibilidad para personalizar la visualización de resultados
   const [sortBy, setSortBy] = useState('relevance');
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
 
+  // Utilizo un efecto para cargar los resultados de búsqueda
+  // Recupero productos cuando no hay resultados iniciales
   useEffect(() => {
     const fetchSearchResults = async () => {
+      // Verifico si necesito realizar una búsqueda
       if (searchQuery && (!initialResults || initialResults.length === 0)) {
         setLoading(true);
         try {
+          // Invoco al servicio de búsqueda de productos
           const searchResults = await productService.searchProducts(searchQuery);
           
-          // Asegurar que results sea un array
+          // Me aseguro de que los resultados sean un array
           const productsArray = Array.isArray(searchResults) 
             ? searchResults 
             : (searchResults.products || []);
           
+          // Actualizo el estado con los resultados obtenidos
           setResults(productsArray);
           setLoading(false);
         } catch (err) {
+          // Manejo cualquier error que ocurra durante la búsqueda
           setError(err.message);
           setLoading(false);
         }
       } else {
+        // Si ya tengo resultados, los establezco directamente
         setResults(initialResults);
       }
     };
@@ -48,13 +63,16 @@ const SearchResultsPage = () => {
     fetchSearchResults();
   }, [searchQuery, initialResults]);
 
-  // Filtrar y ordenar resultados
+  // Filtro y ordeno los resultados
+  // Aplico filtros de precio y criterios de ordenamiento según mis necesidades
   const filteredResults = (Array.isArray(results) ? results : [])
     .filter(product => 
+      // Filtro los productos por rango de precio
       product.price >= priceRange.min && 
       product.price <= priceRange.max
     )
     .sort((a, b) => {
+      // Ordeno los resultados según el criterio seleccionado
       switch (sortBy) {
         case 'price_asc':
           return a.price - b.price;
@@ -67,12 +85,13 @@ const SearchResultsPage = () => {
       }
     });
 
+  // Renderizado condicional de estados de carga y error
   if (loading) return <div>Cargando resultados...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header de resultados de búsqueda */}
+      {/* Encabezado de resultados de búsqueda */}
       <div className="mb-8">
         {/* Botón para volver atrás */}
         <Button
@@ -111,7 +130,7 @@ const SearchResultsPage = () => {
         </div>
       </div>
 
-      {/* Resto del código permanece igual */}
+      {/* Contenido principal de resultados */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Sidebar con filtros de precio */}
         <aside className="lg:col-span-1">
@@ -189,4 +208,5 @@ const SearchResultsPage = () => {
 };
 
 export default SearchResultsPage;
+
 
