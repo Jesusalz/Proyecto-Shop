@@ -1,7 +1,7 @@
 import api from './api';
 
 const productService = {
-  getAll: async (params = { limit: 12, skip: 0 }) => {
+  getAll: async (params = { limit: 8, skip: 0 }) => {
     try {
       const response = await api.get('/products', { 
         params: {
@@ -26,6 +26,7 @@ const productService = {
 
   getByCategory: async (category, params = { limit: 12, skip: 0 }) => {
     try {
+      
       const response = await api.get(`/products/category/${category}`, {
         params: {
           limit: params.limit,
