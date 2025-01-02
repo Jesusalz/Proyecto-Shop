@@ -1,49 +1,47 @@
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { selectCartTotal, selectCartItems } from '@/store/cartSlice';
-import { Button } from '@/components/common';
+import { selectCartTotal } from '@/store/cartSlice';
 
-const CartSummary = () => {
+const CartSummary = ({ cartItems = [] }) => { // Valor predeterminado para cartItems
   const total = useSelector(selectCartTotal);
-  const items = useSelector(selectCartItems);
-  const navigate = useNavigate();
-
-  const handleCheckout = () => {
-    if (items.length > 0) {
-      navigate('/checkout');
-    }
-  };
 
   return (
     <div className="bg-gray-50 rounded-lg p-6">
-      <h2 className="text-lg font-medium text-gray-900">Resumen del pedido</h2>
-      
-      <div className="mt-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-600">Productos ({items.length})</p>
-          <p className="text-sm font-medium text-gray-900">${total.toFixed(2)}</p>
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-600">Envío</p>
-          <p className="text-sm font-medium text-gray-900">Gratis</p>
-        </div>
-        
-        <div className="border-t border-gray-200 pt-4">
-          <div className="flex items-center justify-between">
-            <p className="text-base font-medium text-gray-900">Total</p>
-            <p className="text-base font-medium text-gray-900">${total.toFixed(2)}</p>
+      <h2 className="text-lg font-medium mb-4">Resumen del Pedido</h2>
+      <div className="space-y-4">
+        {cartItems.map((item) => (
+          <div key={item.id} className="flex justify-between">
+            <span className="text-gray-600">
+              {item.title} x {item.quantity}
+            </span>
+            <span className="font-medium">
+              ${(item.price * item.quantity).toFixed(2)}
+            </span>
+          </div>
+        ))}
+        <div className="border-t pt-4">
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-600">Subtotal</span>
+            <span className="font-medium">
+              ${(total - (total * 0.21)).toFixed(2)}
+            </span>
+          </div>
+          <div className="flex justify-between mt-2">
+            <span className="text-sm text-gray-600">IVA (21%)</span>
+            <span className="font-medium">
+              ${(total * 0.21).toFixed(2)}
+            </span>
+          </div>
+          <div className="flex justify-between mt-2">
+            <span className="text-sm text-gray-600">Envío</span>
+            <span className="font-medium">Gratis</span>
+          </div>
+          <div className="flex justify-between mt-4 text-lg font-bold">
+            <span>Total</span>
+            <span>${total.toFixed(2)}</span>
           </div>
         </div>
       </div>
-      
-      <Button
-        className="w-full mt-6"
-        onClick={handleCheckout}
-        disabled={items.length === 0}
-      >
-        {items.length === 0 ? 'Carrito vacío' : 'Proceder al pago'}
-      </Button>
     </div>
   );
 };
