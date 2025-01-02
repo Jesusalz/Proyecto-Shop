@@ -29,16 +29,18 @@ const ProductPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex gap-8">
+      <div className="flex flex-col md:flex-row gap-8">
         <Sidebar />
         <div className="flex-1">
           {currentCategory && (
-            <h1 className="text-2xl font-bold mb-6 capitalize">
+            <h1 className="text-xl md:text-2xl font-bold mb-6 capitalize">
               {currentCategory}
             </h1>
           )}
           {loading ? (
-            <p>Cargando productos...</p>
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
+            </div>
           ) : (
             <>
               <ProductList products={products} />
