@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { 
-  fetchCategories, 
-  fetchProductsByCategory, 
-  fetchProducts, 
-  setFilters 
+import {
+  fetchCategories,
+  fetchProductsByCategory,
+  fetchProducts,
+  setFilters,
 } from '@/store/productSlice';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'; // Iconos para el menú
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -17,9 +18,10 @@ const Sidebar = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [sortBy, setSortBy] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Estado para el menú móvil
 
   // Obtener categorías desde Redux
-  const categories = useSelector(state => state.products.categories) || [];
+  const categories = useSelector((state) => state.products.categories) || [];
   const currentCategory = new URLSearchParams(location.search).get('category');
 
   // Opciones de ordenamiento
@@ -27,7 +29,7 @@ const Sidebar = () => {
     { value: 'price-asc', label: 'Precio: Menor a Mayor' },
     { value: 'price-desc', label: 'Precio: Mayor a Menor' },
     { value: 'rating-desc', label: 'Mejor Valorados' },
-    { value: 'name-asc', label: 'Nombre A-Z' }
+    { value: 'name-asc', label: 'Nombre A-Z' },
   ];
 
   // Cargar categorías al montar el componente
@@ -40,7 +42,7 @@ const Sidebar = () => {
     dispatch(setFilters({
       categories: selectedCategories,
       priceRange,
-      sortBy
+      sortBy,
     }));
   }, [selectedCategories, priceRange, sortBy, dispatch]);
 
@@ -53,89 +55,111 @@ const Sidebar = () => {
       navigate('/products');
       dispatch(fetchProducts({ limit: 12, skip: 0 }));
     }
+    setIsMobileMenuOpen(false); // Cerrar el menú móvil al seleccionar una categoría
   };
 
   // Manejar selección de categorías
   const handleCategorySelect = (categorySlug) => {
-    setSelectedCategories(prev =>
+    setSelectedCategories((prev) =>
       prev.includes(categorySlug)
-        ? prev.filter(c => c !== categorySlug)
+        ? prev.filter((c) => c !== categorySlug)
         : [...prev, categorySlug]
     );
   };
 
   return (
-    <aside className="w-64 bg-white p-4 rounded-lg shadow-lg">
-      {/* Sección de Categorías */}
-      <section className="mb-6">
-        <h2 className="text-lg font-semibold mb-4">Categorías</h2>
-        <ul className="space-y-2 max-h-60 overflow-y-auto">
-          <li key="all">
-            <button 
-              onClick={() => handleCategoryClick(null)}
-              className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 
-                ${!currentCategory ? 'bg-indigo-50 text-indigo-600' : ''}`}
-            >
-              Todos los productos
-            </button>
-          </li>
-          {categories.map((category) => (
-            <li key={category.slug} className="flex items-center">
-              <input
-                type="checkbox"
-                id={`category-${category.slug}`}
-                checked={selectedCategories.includes(category.slug)}
-                onChange={() => handleCategorySelect(category.slug)}
-                className="mr-2 rounded text-indigo-600"
-              />
+    <>
+      {/* Botón para abrir el menú en móviles */}
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="md:hidden p-2 bg-indigo-600 text-white rounded-lg fixed top-4 left-4 z-50"
+      >
+        {isMobileMenuOpen ? (
+          <XMarkIcon className="h-6 w-6" />
+        ) : (
+          <Bars3Icon className="h-6 w-6" />
+        )}
+      </button>
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed md:static inset-y-0 left-0 w-64 bg-white p-4 rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out ${
+          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        } md:transform-none z-40`}
+      >
+        {/* Sección de Categorías */}
+        <section className="mb-6">
+          <h2 className="text-lg font-semibold mb-4">Categorías</h2>
+          <ul className="space-y-2 max-h-60 overflow-y-auto">
+            <li key="all">
               <button
-                onClick={() => handleCategoryClick(category.slug)}
-                className={`flex-grow text-left px-3 py-2 rounded hover:bg-gray-100
-                  ${currentCategory === category.slug ? 'bg-indigo-50 text-indigo-600' : ''}`}
+                onClick={() => handleCategoryClick(null)}
+                className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 ${
+                  !currentCategory ? 'bg-indigo-50 text-indigo-600' : ''
+                }`}
               >
-                {category.name}
+                Todos los productos
               </button>
             </li>
-          ))}
-        </ul>
-      </section>
+            {categories.map((category) => (
+              <li key={category.slug} className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={`category-${category.slug}`}
+                  checked={selectedCategories.includes(category.slug)}
+                  onChange={() => handleCategorySelect(category.slug)}
+                  className="mr-2 rounded text-indigo-600"
+                />
+                <button
+                  onClick={() => handleCategoryClick(category.slug)}
+                  className={`flex-grow text-left px-3 py-2 rounded hover:bg-gray-100 ${
+                    currentCategory === category.slug ? 'bg-indigo-50 text-indigo-600' : ''
+                  }`}
+                >
+                  {category.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      {/* Sección de Precio */}
-      <section className="mb-6">
-        <h3 className="font-semibold text-gray-800 mb-3">Precio</h3>
-        <div className="space-y-2">
-          <input 
-            type="range" 
-            min="0" 
-            max="1000" 
-            value={priceRange[1]} 
-            onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-            className="w-full accent-indigo-600"
-          />
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>${priceRange[0]}</span>
-            <span>${priceRange[1]}</span>
+        {/* Sección de Precio */}
+        <section className="mb-6">
+          <h3 className="font-semibold text-gray-800 mb-3">Precio</h3>
+          <div className="space-y-2">
+            <input
+              type="range"
+              min="0"
+              max="1000"
+              value={priceRange[1]}
+              onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+              className="w-full accent-indigo-600"
+            />
+            <div className="flex justify-between text-sm text-gray-600">
+              <span>${priceRange[0]}</span>
+              <span>${priceRange[1]}</span>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Sección de Ordenamiento */}
-      <section className="mb-6">
-        <h3 className="font-semibold text-gray-800 mb-3">Ordenar por</h3>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="w-full p-2 border rounded-md text-sm focus:ring-2 focus:ring-indigo-500"
-        >
-          <option value="">Seleccionar...</option>
-          {sortOptions.map(option => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </section>
-    </aside>
+        {/* Sección de Ordenamiento */}
+        <section className="mb-6">
+          <h3 className="font-semibold text-gray-800 mb-3">Ordenar por</h3>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="w-full p-2 border rounded-md text-sm focus:ring-2 focus:ring-indigo-500"
+          >
+            <option value="">Seleccionar...</option>
+            {sortOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </section>
+      </aside>
+    </>
   );
 };
 
