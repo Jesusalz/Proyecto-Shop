@@ -2,50 +2,50 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { selectCartTotal } from '@/store/cartSlice';
 
-const CheckoutSummary = ({ items, step }) => {
+const CheckoutSummary = ({ items }) => {
   const total = useSelector(selectCartTotal);
 
   return (
-    <div className="bg-gray-50 rounded-lg p-6 sticky top-4">
-      <h2 className="text-lg font-medium text-gray-900">Resumen del pedido</h2>
-      
-      <div className="mt-6 space-y-4">
+    <div className="bg-gray-50 rounded-lg p-6">
+      <h2 className="text-lg font-medium mb-4">Resumen del Pedido</h2>
+
+      {/* Productos */}
+      <div className="space-y-4">
         {items.map((item) => (
-          <div key={item.id} className="flex justify-between text-sm">
-            <span className="text-gray-600">
-              {item.title} x {item.quantity}
-            </span>
-            <span className="font-medium">
-              ${(item.price * item.quantity).toFixed(2)}
-            </span>
+          <div key={item.id} className="flex items-center justify-between">
+            <div className="flex items-center">
+              <img
+                src={item.thumbnail}
+                alt={item.title}
+                className="w-12 h-12 object-cover rounded-lg mr-3"
+              />
+              <div>
+                <h3 className="text-base font-medium">{item.title}</h3>
+                <p className="text-sm text-gray-500">${item.price}</p>
+              </div>
+            </div>
+            <span>${(item.price * item.quantity).toFixed(2)}</span>
           </div>
         ))}
-        
-        <div className="border-t pt-4">
-          <div className="flex justify-between">
-            <span className="text-sm text-gray-600">Subtotal</span>
-            <span className="font-medium">${total.toFixed(2)}</span>
-          </div>
-          
-          <div className="flex justify-between mt-2">
-            <span className="text-sm text-gray-600">Envío</span>
-            <span className="font-medium">Gratis</span>
-          </div>
-          
-          <div className="flex justify-between mt-4 text-lg font-bold">
-            <span>Total</span>
-            <span>${total.toFixed(2)}</span>
-          </div>
-        </div>
       </div>
 
-      <div className="mt-6">
-        <div className="flex items-center">
-          <div className="flex-1 border-t border-gray-300"></div>
-          <span className="px-4 text-sm text-gray-500">
-            Paso {step} de 2
-          </span>
-          <div className="flex-1 border-t border-gray-300"></div>
+      {/* Desglose de Costos */}
+      <div className="border-t pt-4">
+        <div className="flex justify-between">
+          <span className="text-sm text-gray-600">Subtotal</span>
+          <span>${(total - (total * 0.21)).toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between mt-2">
+          <span className="text-sm text-gray-600">IVA (21%)</span>
+          <span>${(total * 0.21).toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between mt-2">
+          <span className="text-sm text-gray-600">Envío</span>
+          <span>Gratis</span>
+        </div>
+        <div className="flex justify-between mt-4 text-lg font-bold">
+          <span>Total</span>
+          <span>${total.toFixed(2)}</span>
         </div>
       </div>
     </div>

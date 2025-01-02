@@ -3,11 +3,17 @@ import { useForm } from 'react-hook-form';
 import { Input, Button } from '@/components/common';
 
 const ShippingForm = ({ onNext }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors } 
+  } = useForm({
+    mode: 'onSubmit',
+    reValidateMode: 'onSubmit'
+  });
 
   const onSubmit = (data) => {
-    // Aquí guardaríamos los datos de envío
-    onNext();
+    onNext(data);
   };
 
   return (
@@ -17,26 +23,54 @@ const ShippingForm = ({ onNext }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
           label="Nombre completo"
-          {...register('fullName', { required: 'Este campo es requerido' })}
+          {...register('fullName', { 
+            required: 'Este campo es requerido',
+            minLength: {
+              value: 2,
+              message: 'El nombre debe tener al menos 2 caracteres'
+            },
+            pattern: {
+              value: /^[A-Za-z\s]+$/,
+              message: 'El nombre solo puede contener letras y espacios'
+            }
+          })}
           error={errors.fullName?.message}
         />
         
         <Input
           label="Dirección"
-          {...register('address', { required: 'Este campo es requerido' })}
+          {...register('address', { 
+            required: 'Este campo es requerido',
+            minLength: {
+              value: 5,
+              message: 'La dirección debe tener al menos 5 caracteres'
+            }
+          })}
           error={errors.address?.message}
         />
         
         <div className="grid grid-cols-2 gap-4">
           <Input
             label="Ciudad"
-            {...register('city', { required: 'Este campo es requerido' })}
+            {...register('city', { 
+              required: 'Este campo es requerido',
+              minLength: {
+                value: 2,
+                message: 'La ciudad debe tener al menos 2 caracteres'
+              }
+            })}
             error={errors.city?.message}
           />
           
           <Input
             label="Código Postal"
-            {...register('zipCode', { required: 'Este campo es requerido' })}
+            {...register('zipCode', { 
+              required: 'Código Postal es requerido',
+              pattern: {
+                value: /^[A-Z]?\d{4}[A-Z]{0,3}$/,
+                message: 'Código Postal inválido'
+              }
+            })}
             error={errors.zipCode?.message}
           />
         </div>
@@ -44,7 +78,20 @@ const ShippingForm = ({ onNext }) => {
         <Input
           label="Teléfono"
           type="tel"
-          {...register('phone', { required: 'Este campo es requerido' })}
+          {...register('phone', { 
+            required: 'Número de teléfono es requerido',
+            pattern: {
+              value: /^(\+?54|0)?(?:9?\d{10})$/,
+              message: 'Número de teléfono argentino inválido'
+            },
+            validate: (value) => {
+              const cleanPhone = value.replace(/[\s\-()]/g, '');
+              return (
+                (cleanPhone.length >= 10 && cleanPhone.length <= 13) || 
+                'El teléfono debe tener entre 10 y 13 dígitos'
+              );
+            }
+          })}
           error={errors.phone?.message}
         />
         

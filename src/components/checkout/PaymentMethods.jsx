@@ -27,10 +27,15 @@ const PaymentMethods = ({ onNext, onBack }) => {
     }
   ];
 
+  const handleMethodSelect = () => {
+    const selectedMethodName = paymentMethods.find(m => m.id === selectedMethod)?.name;
+    onNext(selectedMethodName);
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow">
       <h2 className="text-xl font-semibold mb-6">Método de Pago</h2>
-      
+    
       <div className="space-y-4">
         {paymentMethods.map((method) => (
           <div
@@ -46,6 +51,7 @@ const PaymentMethods = ({ onNext, onBack }) => {
               <method.icon className="h-6 w-6 text-gray-600" />
               <span className="ml-3 font-medium">{method.name}</span>
             </div>
+            <p className="text-sm text-gray-500 mt-2">Sin cargos adicionales</p>
           </div>
         ))}
       </div>
@@ -59,7 +65,7 @@ const PaymentMethods = ({ onNext, onBack }) => {
           Volver
         </Button>
         <Button
-          onClick={onNext}
+          onClick={handleMethodSelect}
           disabled={!selectedMethod}
           className="flex-1"
         >
