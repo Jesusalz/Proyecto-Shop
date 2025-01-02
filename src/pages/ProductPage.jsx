@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { 
-  fetchProducts, 
-  fetchProductsByCategory, 
-  selectFilteredProducts, 
+import {
+  fetchProducts,
+  fetchProductsByCategory,
+  selectFilteredProducts,
   selectProductsLoading,
-  selectPagination 
+  resetPagination,
 } from '@/store/productSlice';
 import { ProductList, LoadMore } from '@/components/products';
 import { Sidebar } from '@/components/layout';
@@ -16,19 +16,16 @@ const ProductPage = () => {
   const location = useLocation();
   const products = useSelector(selectFilteredProducts);
   const loading = useSelector(selectProductsLoading);
-  const { currentPage } = useSelector(selectPagination);
   const currentCategory = new URLSearchParams(location.search).get('category');
 
   useEffect(() => {
+    dispatch(resetPagination());
     if (currentCategory) {
       dispatch(fetchProductsByCategory(currentCategory));
     } else {
-      // Only fetch if we're on the first page
-      if (currentPage === 0) {
-        dispatch(fetchProducts({ limit: 12, skip: 0 }));
-      }
+      dispatch(fetchProducts({ limit: 12, skip: 0 }));
     }
-  }, [dispatch, currentCategory, currentPage]);
+  }, [dispatch, currentCategory]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -40,8 +37,14 @@ const ProductPage = () => {
               {currentCategory}
             </h1>
           )}
-          <ProductList products={products} />
-          {!currentCategory && <LoadMore />}
+          {loading ? (
+            <p>Cargando productos...</p>
+          ) : (
+            <>
+              <ProductList products={products} />
+              {!currentCategory && <LoadMore />}
+            </>
+          )}
         </div>
       </div>
     </div>
