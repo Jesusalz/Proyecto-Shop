@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 
 const Carousel = ({ 
@@ -10,25 +10,47 @@ const Carousel = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [responsiveItemsPerView, setResponsiveItemsPerView] = useState(itemsPerView);
 
-  const nextSlide = () => {
+  // Ajustar itemsPerView según el tamaño de la pantalla
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setResponsiveItemsPerView(1); // 1 item en móviles
+      } else if (window.innerWidth < 1024) {
+        setResponsiveItemsPerView(2); // 2 items en tablets
+      } else {
+        setResponsiveItemsPerView(itemsPerView); // itemsPerView en desktop
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Llamar al inicio para establecer el valor inicial
+    return () => window.removeEventListener('resize', handleResize);
+  }, [itemsPerView]);
+
+  const nextSlide = useCallback(() => {
     setCurrentIndex((prevIndex) => 
-      prevIndex + itemsPerView >= items.length ? 0 : prevIndex + 1
+      prevIndex + responsiveItemsPerView >= items.length ? 0 : prevIndex + 1
     );
-  };
+  }, [items.length, responsiveItemsPerView]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? Math.max(0, items.length - itemsPerView) : prevIndex - 1
+      prevIndex === 0 ? Math.max(0, items.length - responsiveItemsPerView) : prevIndex - 1
     );
-  };
+  }, [items.length, responsiveItemsPerView]);
 
+  // Autoplay
   useEffect(() => {
     if (!isHovered) {
       const interval = setInterval(nextSlide, autoplayTime);
       return () => clearInterval(interval);
     }
-  }, [isHovered, autoplayTime]);
+  }, [isHovered, autoplayTime, nextSlide]);
+
+  // Calcular el ancho de cada item
+  const itemWidth = useMemo(() => `${100 / responsiveItemsPerView}%`, [responsiveItemsPerView]);
 
   return (
     <div 
@@ -36,16 +58,17 @@ const Carousel = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {title && <h2 className="text-2xl font-bold mb-4">{title}</h2>}
       <div className="overflow-hidden relative rounded-lg">
         <div 
           className="flex transition-transform duration-500 ease-out"
-          style={{ transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)` }}
+          style={{ transform: `translateX(-${currentIndex * (100 / responsiveItemsPerView)}%)` }}
         >
           {items.map((item, index) => (
             <div 
               key={index} 
               className="flex-none"
-              style={{ width: `${100 / itemsPerView}%` }}
+              style={{ width: itemWidth }}
             >
               {renderItem(item, index)}
             </div>
@@ -69,15 +92,15 @@ const Carousel = ({
 
       {/* Indicadores de página */}
       <div className="flex justify-center mt-4 gap-2">
-        {Array.from({ length: Math.ceil(items.length / itemsPerView) }).map((_, idx) => (
+        {Array.from({ length: Math.ceil(items.length / responsiveItemsPerView) }).map((_, idx) => (
           <button
             key={idx}
             className={`h-2 rounded-full transition-all ${
-              Math.floor(currentIndex / itemsPerView) === idx 
+              Math.floor(currentIndex / responsiveItemsPerView) === idx 
                 ? 'w-4 bg-indigo-600' 
                 : 'w-2 bg-gray-300'
             }`}
-            onClick={() => setCurrentIndex(idx * itemsPerView)}
+            onClick={() => setCurrentIndex(idx * responsiveItemsPerView)}
           />
         ))}
       </div>
