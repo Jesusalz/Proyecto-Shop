@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import {
   GlobeAltIcon,
   ChatBubbleLeftIcon,
-  HeartIcon
+  HeartIcon,
 } from '@heroicons/react/24/outline';
 
 const socialLinks = [
@@ -39,15 +39,15 @@ const LandingFooter = () => {
   return (
     <footer className="bg-white text-gray-800 border-t border-gray-200">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Columna 1 */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-900">Nuestra Tienda</h3>
             <ul className="space-y-2">
-              <li><Link to="/products" className="hover:text-indigo-600">Productos</Link></li>
-              <li><Link to="/categories" className="hover:text-indigo-600">Categorías</Link></li>
-              <li><Link to="/cart" className="hover:text-indigo-600">Carrito</Link></li>
-              <li><Link to="/favorites" className="hover:text-indigo-600">Favoritos</Link></li>
+              <li><Link to="/products" className="hover:text-indigo-600 transition duration-300">Productos</Link></li>
+              <li><Link to="/categories" className="hover:text-indigo-600 transition duration-300">Categorías</Link></li>
+              <li><Link to="/cart" className="hover:text-indigo-600 transition duration-300">Carrito</Link></li>
+              <li><Link to="/favorites" className="hover:text-indigo-600 transition duration-300">Favoritos</Link></li>
             </ul>
           </div>
 
@@ -55,10 +55,10 @@ const LandingFooter = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Categorías</h3>
             <ul className="space-y-2">
-              <li><Link to="/categories/electronics" className="hover:text-gray-300">Electrónicos</Link></li>
-              <li><Link to="/categories/clothing" className="hover:text-gray-300">Ropa</Link></li>
-              <li><Link to="/categories/accessories" className="hover:text-gray-300">Accesorios</Link></li>
-              <li><Link to="/categories/all" className="hover:text-gray-300">Ver todas</Link></li>
+              <li><Link to="/categories/electronics" className="hover:text-indigo-600 transition duration-300">Electrónicos</Link></li>
+              <li><Link to="/categories/clothing" className="hover:text-indigo-600 transition duration-300">Ropa</Link></li>
+              <li><Link to="/categories/accessories" className="hover:text-indigo-600 transition duration-300">Accesorios</Link></li>
+              <li><Link to="/categories/all" className="hover:text-indigo-600 transition duration-300">Ver todas</Link></li>
             </ul>
           </div>
 
@@ -66,10 +66,10 @@ const LandingFooter = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Mi Cuenta</h3>
             <ul className="space-y-2">
-              <li><Link to="/profile" className="hover:text-gray-300">Mi Perfil</Link></li>
-              <li><Link to="/orders" className="hover:text-gray-300">Mis Pedidos</Link></li>
-              <li><Link to="/favorites" className="hover:text-gray-300">Mis Favoritos</Link></li>
-              <li><Link to="/settings" className="hover:text-gray-300">Configuración</Link></li>
+              <li><Link to="/profile" className="hover:text-indigo-600 transition duration-300">Mi Perfil</Link></li>
+              <li><Link to="/orders" className="hover:text-indigo-600 transition duration-300">Mis Pedidos</Link></li>
+              <li><Link to="/favorites" className="hover:text-indigo-600 transition duration-300">Mis Favoritos</Link></li>
+              <li><Link to="/settings" className="hover:text-indigo-600 transition duration-300">Configuración</Link></li>
             </ul>
           </div>
 
@@ -81,7 +81,7 @@ const LandingFooter = () => {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-gray-600 hover:text-indigo-600"
+                  className="text-gray-600 hover:text-indigo-600 transition duration-300"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -102,4 +102,5 @@ const LandingFooter = () => {
     </footer>
   );
 };
+
 export default LandingFooter;
